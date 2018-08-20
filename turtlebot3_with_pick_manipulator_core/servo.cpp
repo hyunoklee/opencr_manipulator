@@ -1,5 +1,8 @@
 #include "servo.h"
 
+#define MAX_DEGREE  60
+#define MIN_DEGREE -60
+
 Servo::Servo()
 {
   pin_ = 3;
@@ -38,16 +41,22 @@ void Servo::offset(uint16_t min_pulse_offset, uint16_t max_pulse_offset)
   offset_.for_max_pulse = max_pulse_offset;
 }
 
-void Servo::write(uint32_t angle)
+//void Servo::write(uint32_t angle)
+void Servo::write(int angle)
 {
-  uint32_t get_angle = angle;
-  uint16_t duty = 0;
+  //uint32_t get_angle = angle;
+  //uint16_t duty = 0;
+  int deg = angle ;
+  int duty = 0 ;  
 
-  uint32_t min_pulse = (uint32_t)(pow((double)(2), (double)(res_))*0.05) + offset_.for_min_pulse;
-  uint32_t max_pulse = (uint32_t)(pow((double)(2), (double)(res_))*0.1)  + offset_.for_max_pulse;
+  //uint32_t min_pulse = (uint32_t)(pow((double)(2), (double)(res_))*0.05) + offset_.for_min_pulse;
+  //uint32_t max_pulse = (uint32_t)(pow((double)(2), (double)(res_))*0.1)  + offset_.for_max_pulse;
 
   // angle = constrain(angle, angle_range_.min, angle_range_.max);    
-  duty = map(angle, angle_range_.min, angle_range_.max, min_pulse, max_pulse);
+  //duty = map(angle, angle_range_.min, angle_range_.max, min_pulse, max_pulse);
+
+  deg = constrain(deg, MIN_DEGREE, MAX_DEGREE);    
+  duty = map(deg, MIN_DEGREE, MAX_DEGREE, 52, 122);
 
   drv_pwm_set_duty(pin_, res_, duty);
 }

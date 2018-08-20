@@ -29,6 +29,6 @@ class Servo
   void begin(uint16_t range = 120, uint32_t freq = 50, uint32_t res = 10);
   void offset(uint16_t min_pulse_offset, uint16_t max_pulse_offset);
   void attach(uint8_t pin);
-  void write(uint32_t angle);
+  void write(int angle);
 };
 

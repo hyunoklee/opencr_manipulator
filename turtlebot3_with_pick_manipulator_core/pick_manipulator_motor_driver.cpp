@@ -41,7 +41,7 @@ bool PickManipulatorMotorDriver::init(void)
 {
 
   //double init_joint_position[JOINT_NUM] = {0.0, -1.5707, 1.37, 0.2258};
-  double init_joint_position[JOINT_NUM] = {0.0, 0, 0, 0};
+  double init_joint_position[JOINT_NUM] = {0,0,0,0};
   double init_gripper_position = {10}; //30
   int pin_num[JOINT_NUM] = {3,5,6,9} ;
   
@@ -56,7 +56,7 @@ bool PickManipulatorMotorDriver::init(void)
     joint[index].begin() ;
 	  joint[index].attach(pin_num[index]) ;
 	  joint[index].offset(1, 20);
-	  joint[index].write(init_joint_position[index]);
+	  joint[index].write((int)init_joint_position[index]);
 	  write_joint_position[index] = init_joint_position[index];
   }
   
@@ -96,11 +96,11 @@ bool PickManipulatorMotorDriver::getGripperTorque()
 }
 
 bool PickManipulatorMotorDriver::readPosition(double *value)
-{  
+{   
   for (int index = 0; index < JOINT_NUM; index++)
   {
     //value[index] = joint_controller_.convertValue2Radian(dxl_id_[index], present_position[index]);
-	value[index]  = write_joint_position[index] ; 
+	  value[index]  = write_joint_position[index] ; 
   }
 }
 
@@ -116,12 +116,14 @@ bool PickManipulatorMotorDriver::readVelocity(double *value)
 bool PickManipulatorMotorDriver::writeJointPosition(double *value)
 {
   int32_t goal_position[JOINT_NUM] = {0, };
+  float pi = 3.14 ;
 
   for (int index = 0; index < JOINT_NUM; index++)
   {
     //goal_position[index] = joint_controller_.convertRadian2Value(dxl_id_[index], value[index]);
-    joint[index].write(value[index]);
-	write_joint_position[index] = value[index] ;
+    value[index] = value[index]*180/pi ;
+    joint[index].write((int)value[index]);
+	  write_joint_position[index] = value[index] ;
   }
   return true;
 }
@@ -131,3 +133,24 @@ bool PickManipulatorMotorDriver::writeGripperPosition(double value)
   write_gripper_position = value ;
   return true;
 }
+/*
+int32_t PickManipulatorMotorDriver::convertRadian2Value(uint8_t id, float radian)
+{
+  int32_t value = 0;
+  int8_t factor = getToolsFactor(id);
+
+  if (radian > 0)
+  {
+    value = (radian * (tools_[factor].getValueOfMaxRadianPosition() - tools_[factor].getValueOfZeroRadianPosition()) / tools_[factor].getMaxRadian()) + tools_[factor].getValueOfZeroRadianPosition();
+  }
+  else if (radian < 0)
+  {
+    value = (radian * (tools_[factor].getValueOfMinRadianPosition() - tools_[factor].getValueOfZeroRadianPosition()) / tools_[factor].getMinRadian()) + tools_[factor].getValueOfZeroRadianPosition();
+  }
+  else
+  {
+    value = tools_[factor].getValueOfZeroRadianPosition();
+  }
+
+  return value;
+}*/

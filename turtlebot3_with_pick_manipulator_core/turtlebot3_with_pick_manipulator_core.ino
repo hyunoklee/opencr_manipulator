@@ -175,7 +175,7 @@ void commandVelocityCallback(const geometry_msgs::Twist& cmd_vel_msg)
 void goalJointPositionCallback(const sensor_msgs::JointState& goal_joint_position_msg)
 {
   double goal_joint_position[JOINT_NUM] = {0.0, 0.0, 0.0, 0.0};
-  nh.loginfo("recieve goalJointPositionCallback ");
+
   for (int index = 0; index < JOINT_NUM; index++)
     goal_joint_position[index] = goal_joint_position_msg.position[index];
 
@@ -446,6 +446,9 @@ void updateOdometry(void)
 /*******************************************************************************
 * Update the joint states 
 *******************************************************************************/
+static double get_joint_position[JOINT_NUM + GRIP_NUM] = {0.0,};
+static double get_joint_velocity[JOINT_NUM + GRIP_NUM] = {0.0,};
+
 void updateJointStates(void)
 {
   /*static float joint_states_pos[WHEEL_NUM + JOINT_NUM + PALM_NUM] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
@@ -455,16 +458,19 @@ void updateJointStates(void)
   static float joint_states_pos[JOINT_NUM + PALM_NUM] = {0.0,};
   static float joint_states_vel[JOINT_NUM + PALM_NUM] = {0.0,};
   static float joint_states_eff[JOINT_NUM + PALM_NUM] = {0.0,};
+  char log_msg[50];
 
   /*static double get_joint_position[JOINT_NUM + GRIP_NUM] = {0.0, 0.0, 0.0, 0.0, 0.0};
   static double get_joint_velocity[JOINT_NUM + GRIP_NUM] = {0.0, 0.0, 0.0, 0.0, 0.0};*/
 
-  static double get_joint_position[JOINT_NUM + GRIP_NUM] = {0.0, 0.0, 0.0, 0.0, 0.0};
-  static double get_joint_velocity[JOINT_NUM + GRIP_NUM] = {0.0, 0.0, 0.0, 0.0, 0.0};
+  
 
   joint_driver.readPosition(get_joint_position);
   joint_driver.readVelocity(get_joint_velocity);
 
+  //sprintf(log_msg, "[%.2f,%.2f,%.2f,%.2f,%.2f,%.2f", get_joint_position[0], get_joint_position[1], get_joint_position[2], get_joint_position[3]);
+  //nh.loginfo(log_msg); 
+      
   /*joint_states_pos[LEFT]  = last_rad[LEFT];
   joint_states_pos[RIGHT] = last_rad[RIGHT];
   joint_states_pos[2] = get_joint_position[0];

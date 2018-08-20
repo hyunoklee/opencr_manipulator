@@ -1,4 +1,4 @@
-#define PWM_PIN        11
+#define PWM_PIN        3
 #define PWM_FREQ       50 //hz
 #define PWM_RESOLUTION 10
 
@@ -14,6 +14,8 @@ void setup()
 
   drv_pwm_set_freq(PWM_PIN, PWM_FREQ);
   drv_pwm_setup(PWM_PIN);
+
+  Serial.print("....start");
 }
 
 void loop()

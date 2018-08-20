@@ -176,8 +176,8 @@ ros::Publisher odom_pub("odom", &odom);
 
 // Joint(Dynamixel) state of Turtlebot3
 sensor_msgs::JointState joint_states;
-ros::Publisher joint_states_pub("joint_states", &joint_states);
-//ros::Publisher joint_states_pub("joint_states2", &joint_states);
+//ros::Publisher joint_states_pub("joint_states", &joint_states);
+ros::Publisher joint_states_pub("joint_states2", &joint_states);
 
 // Battey state of Turtlebot3
 sensor_msgs::BatteryState battery_state_msg;
